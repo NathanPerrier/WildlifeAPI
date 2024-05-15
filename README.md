@@ -41,13 +41,9 @@ python demo.py
 
 * [Python](https://www.python.org/) - The primary programming language used.
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## Authors
 
-* **Nathan Perrier** - [NathanPerrier](https://github.com/NathanPerrier)
+* **Nathan Perrier** | [Github](https://github.com/NathanPerrier)
 
 ## License
 
