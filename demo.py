@@ -4,7 +4,7 @@ print('SPECIES SEARCH \n')
 
 # get species'
 print('WHITING')
-print(Species(species='whiting', debug=True, extensive_info=True, extensive_search=True).species_search())
+print(Species(species='whiting', debug=True, extensive_info=True).species_search())
 
 # extensive_search
 # print('\n\n Wombat (extensive)')
