@@ -46,10 +46,13 @@ class AlaDataAPI:
         """ 
             Fetch the additional information for the species. 
         """
-        result = self.search(url=self.get_url(self.ALA_SPECIES_GUIDE_URL, self.get_name(result)), result=result, key='guide')
-        result = self.search(url=self.get_url(self.ADDITIONAL_INFO_URL, result["guide"][0]["identifier"]), result=result, key='extensive_info')
-        return self.search(url=self.get_url(self.ALA_SPECIES_IMAGES_URL, result["guide"][0]["identifier"]), result=result, key='images')
-    
+        try:
+            result = self.search(url=self.get_url(self.ALA_SPECIES_GUIDE_URL, self.get_name(result)), result=result, key='guide')
+            result = self.search(url=self.get_url(self.ADDITIONAL_INFO_URL, result["guide"][0]["identifier"]), result=result, key='extensive_info')
+            return self.search(url=self.get_url(self.ALA_SPECIES_IMAGES_URL, result["guide"][0]["identifier"]), result=result, key='images')
+        except Exception as e:
+            self.debug_url('ERROR', e)
+            return result
     def get_name(self, result):
         """ 
             Fetch the additional information for the species. 

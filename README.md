@@ -37,6 +37,35 @@ pip install -r requirements.txt
 python demo.py
 ```
 
+## Usage
+
+> To search for a species use
+
+```bash
+Species(species='whiting').species_search()
+```
+
+> To find any group of species user
+
+```bash
+Species(species="fish").species_search()
+```
+
+> Retreive all class names
+
+```bash
+Classes().get_class_names()
+```
+
+> Optional Variables
+
+```bash
+debug | True/False | displays errors and urls
+extensive_search | True/False | provides data for nested urls
+extensive_info | provides additional info for a species (only works with species)
+kingdom | str | change the kingdom from animals
+```
+
 ## Built With
 
 * [Python](https://www.python.org/) - The primary programming language used.
