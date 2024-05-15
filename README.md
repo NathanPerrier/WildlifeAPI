@@ -39,13 +39,13 @@ python demo.py
 
 ## Usage
 
-> To search for a species use
+> To search for a species
 
 ```bash
 Species(species='whiting').species_search()
 ```
 
-> To find any group of species user
+> To find any group of species
 
 ```bash
 Species(species="fish").species_search()
