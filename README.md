@@ -62,7 +62,7 @@ Classes().get_class_names()
 ```bash
 debug | True/False | displays errors and urls
 extensive_search | True/False | provides data for nested urls
-extensive_info | provides additional info for a species (only works with species)
+extensive_info | True/False | provides additional info for a species (only works with species)
 kingdom | str | change the kingdom from animals
 ```
 
