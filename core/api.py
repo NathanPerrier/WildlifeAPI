@@ -53,16 +53,21 @@ class WildlifeDataAPI:
     GET_EPBC_STATUSES_URL = 'getepbcstatuses'
     GET_NCA_STATUSES_URL = 'getncastatuses'
     
+    ALA_SPECIES_GUIDE_URL = 'https://api.ala.org.au/species/guid/'
+    ADDITIONAL_INFO_URL = 'https://api.ala.org.au/species/species/'
+    ALA_SPECIES_IMAGES_URL = 'https://api.ala.org.au/species/imageSearch/'
+    
     FORMAT = 'json'
     
     ACKNOWLEDGEMENT = 'Data courtesy of the Queensland Government Wildlife Data API'
     
 
-    def __init__(self, kingdom='animals', debug=False, extensive_search=False, **kwargs):
+    def __init__(self, kingdom='animals', debug=False, extensive_search=False, extensive_info=False, **kwargs):
         self.kingdom = kingdom
         
         self.debug = debug
         self.extensive_search = extensive_search
+        self.extensive_info = extensive_info
         
         if kwargs.get('class_'):
             kwargs['class'] = kwargs.pop('class_')
@@ -89,27 +94,44 @@ class WildlifeDataAPI:
     def search(self, url, result=None, key=None):
         """ 
             Fetch the data from the specified url and return the result. 
-        """
-        
-        self.debug_url(url)
-            
+        """ 
         try:
-            req = urllib.request.Request(url)
+            result = self.search_request(url, result, key)
 
-            json_text = urllib.request.urlopen(req).read().decode('utf-8')
-            
-            if result is None and key is None:
-                result = json.loads(json_text)
-            else: 
-                result[key] = json.loads(json_text)
-
+            if self.extensive_info: result = self.get_extensive_info(result) #result = self.search_request(url=f'{self.ADDITIONAL_INFO_URL}{self.ALA_SPECIES_ID_URL}{(result["Species"][0]["TaxonID"] if isinstance(result["Species"], list) else result["species"]["TaxonID"])}', result=result, key='extensive_info')
             if self.extensive_search: result = self.get_secondary_results(result)
-                            
+            
             return self.clean_data(result)
         
         except urllib.error.HTTPError as e:
             print(f"Error fetching {url}: {e}")
             return None
+        
+    def get_extensive_info(self, result):
+        """ 
+            Fetch the additional information for the species. 
+        """
+        try:
+            result = self.search_request(url=f'{self.ALA_SPECIES_GUIDE_URL}{result["Species"][0]["ScientificName"].replace(" ", "%20")}', result=result, key='guide')
+            result = self.search_request(url=f'{self.ADDITIONAL_INFO_URL}{result["guide"][0]["identifier"]}', result=result, key='extensive_info')
+            return self.search_request(url=f'{self.ALA_SPECIES_IMAGES_URL}{result["guide"][0]["identifier"]}', result=result, key='images')
+        except Exception as e: 
+            self.debug_url('ERROR (extensive info),', e)
+            return result
+        
+    def search_request(self, url, key=None, result=None):
+        self.debug_url(url)
+                
+        req = urllib.request.Request(url)
+
+        json_text = urllib.request.urlopen(req).read().decode('utf-8')
+        
+        if result is None and key is None:
+            result = json.loads(json_text)
+        else: 
+            result[key] = json.loads(json_text)
+            
+        return result
         
     def get_secondary_results(self, result):
         """ 
@@ -117,17 +139,16 @@ class WildlifeDataAPI:
             
             Only if extensive_search is enabled.
         """
-        
         for key in result:
             if 'Url' in key:  
                 if 'http' in result[key]: 
-                    result = self.search(result[key], result, key)
-                    
+                    result = self.search_request(result[key], result, key)
+            
             try:
                 for secondary_key in (result[key] if isinstance(result[key], dict) else (result[key][0] if isinstance(result[key], list) else {})):
                     if 'Url' in secondary_key:
                         if 'http' in (result[key][secondary_key] if isinstance(result[key], dict) else result[key][0][secondary_key]):
-                            result = (self.search(result[key][secondary_key], result[key], secondary_key) if isinstance(result[key], dict) else self.search(result[key][0][secondary_key], result[key][0], secondary_key))
+                            result = (self.search_request(result[key][secondary_key], result[key], secondary_key) if isinstance(result[key], dict) else self.search(result[key][0][secondary_key], result[key][0], secondary_key))
             except Exception as e: self.debug_url('ERROR,', e)
             
         return result
