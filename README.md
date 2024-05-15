@@ -1,6 +1,6 @@
 # WildlifeAPI
 
-WildlifeAPI is a comprehensive and modular solution designed to interact with the Queensland Government's WildlifeNet API. It allows users to retrieve, analyze, and manipulate wildlife data with ease and efficiency.
+WildlifeAPI is a comprehensive and modular solution designed to interact with the Queensland Government's WildlifeNet API. It allows users to easily retrieve wildlife data with ease and efficiency.
 
 ## Features
 
