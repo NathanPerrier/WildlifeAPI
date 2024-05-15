@@ -1,5 +1,6 @@
 import json
 import urllib.request
+from .ala import AlaDataAPI
 
 class WildlifeDataAPI:
     """
@@ -53,10 +54,6 @@ class WildlifeDataAPI:
     GET_EPBC_STATUSES_URL = 'getepbcstatuses'
     GET_NCA_STATUSES_URL = 'getncastatuses'
     
-    ALA_SPECIES_GUIDE_URL = 'https://api.ala.org.au/species/guid/'
-    ADDITIONAL_INFO_URL = 'https://api.ala.org.au/species/species/'
-    ALA_SPECIES_IMAGES_URL = 'https://api.ala.org.au/species/imageSearch/'
-    
     FORMAT = 'json'
     
     ACKNOWLEDGEMENT = 'Data courtesy of the Queensland Government Wildlife Data API'
@@ -94,11 +91,14 @@ class WildlifeDataAPI:
     def search(self, url, result=None, key=None):
         """ 
             Fetch the data from the specified url and return the result. 
-        """ 
+        """
+        
+        self.debug_url(url)
+            
         try:
             result = self.search_request(url, result, key)
 
-            if self.extensive_info: result = self.get_extensive_info(result) #result = self.search_request(url=f'{self.ADDITIONAL_INFO_URL}{self.ALA_SPECIES_ID_URL}{(result["Species"][0]["TaxonID"] if isinstance(result["Species"], list) else result["species"]["TaxonID"])}', result=result, key='extensive_info')
+            if self.extensive_info: result = AlaDataAPI(self).get_extensive_info(result) 
             if self.extensive_search: result = self.get_secondary_results(result)
             
             return self.clean_data(result)
@@ -107,21 +107,8 @@ class WildlifeDataAPI:
             print(f"Error fetching {url}: {e}")
             return None
         
-    def get_extensive_info(self, result):
-        """ 
-            Fetch the additional information for the species. 
-        """
-        try:
-            result = self.search_request(url=f'{self.ALA_SPECIES_GUIDE_URL}{result["Species"][0]["ScientificName"].replace(" ", "%20")}', result=result, key='guide')
-            result = self.search_request(url=f'{self.ADDITIONAL_INFO_URL}{result["guide"][0]["identifier"]}', result=result, key='extensive_info')
-            return self.search_request(url=f'{self.ALA_SPECIES_IMAGES_URL}{result["guide"][0]["identifier"]}', result=result, key='images')
-        except Exception as e: 
-            self.debug_url('ERROR (extensive info),', e)
-            return result
-        
+   
     def search_request(self, url, key=None, result=None):
-        self.debug_url(url)
-                
         req = urllib.request.Request(url)
 
         json_text = urllib.request.urlopen(req).read().decode('utf-8')
