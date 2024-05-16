@@ -6,3 +6,4 @@ from core.datapoints.projects import Projects
 from core.datapoints.sites import Sites
 from core.datapoints.species import Species
 from core.datapoints.surveys import Surveys
+from core.datapoints.status import Statuses
