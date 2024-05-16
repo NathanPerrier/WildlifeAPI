@@ -2,7 +2,7 @@ from core.__init__ import *
 
 print('SPECIES SEARCH \n')
 
-get species'
+#get species'
 print('WHITING')
 print(Species(species='whiting', debug=True, extensive_info=True).species_search())
 
