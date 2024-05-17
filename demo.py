@@ -16,8 +16,11 @@ print(Species(species='whiting', debug=True, extensive_info=True).species_search
 
 
 # print('\n\n list all fish species')
-# print(Species(debug=True, species="fish").species_search())
+# print(Species(debug=True, species="fish", extensive_search=True).species_search())
 
 # print('\n\n SURVEYS \n')
 
 # print(Surveys(projids=1, debug=True).get_surveys())
+
+# organisations
+# print(Organisations(debug=True).get_organisations())
