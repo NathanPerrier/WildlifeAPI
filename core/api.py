@@ -167,14 +167,16 @@ class WildlifeDataAPI:
         else:
             return data  
 
+
     def clean_result(self, result):
         """ 
             Clean the result by converting keys to snake_case and removing empty values.
         """
-        print('CLEANING')
         try:
-            return result['species'][0]
-        except: 
+            if 'species' in result:
+                return result['species'][0]
+            return result['Species'][0]
+        except:
             return result
 
 
