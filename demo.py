@@ -3,12 +3,12 @@ from core.__init__ import *
 print('SPECIES SEARCH \n')
 
 #get species'
-print('WHITING')
-print(Species(species='whiting', debug=True, extensive_info=True).species_search())
+# print('WHITING')
+# print(Species(species='whiting', debug=True, extensive_info=True).species_search())
 
 # extensive_search
 # print('\n\n Wombat (extensive)')
-# print(Species(species='wombat', debug=True, extensive_search=True).species_search())
+print(Species(species='whiting', debug=True, extensive_search=True).species_search())
 
 # # search for a grass hopper
 # print('\n\n Agaricus bisporus (different kingdom)')
@@ -24,3 +24,5 @@ print(Species(species='whiting', debug=True, extensive_info=True).species_search
 
 # organisations
 # print(Organisations(debug=True).get_organisations())
+
+
