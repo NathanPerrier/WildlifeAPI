@@ -23,14 +23,6 @@ cd WildlifeAPI
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force;
 ```
 
-> 👉 Install **python** modules via `VENV`  
-
-```bash
-virtualenv env
-source env/bin/activate
-pip install -r requirements.txt
-```
-
 > 👉 Run the **demo.py** file  
 
 ```bash
